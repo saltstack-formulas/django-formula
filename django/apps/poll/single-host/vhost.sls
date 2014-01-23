@@ -4,14 +4,14 @@ include:
   - apache
   - apache.mod_wsgi
 {% if grains['os'] == 'CentOS' %}
-  - poll.firewall
+  - django.apps.poll.single-host.firewall
 {% endif %}
 
 poll-vhost:
   file:
     - managed
     - name: {{ apache.vhostdir }}/poll-vhost.conf
-    - source: salt://django/apps/poll/files/poll-vhost.conf
+    - source: salt://django/apps/poll/single-host/files/poll-vhost.conf
     - template: jinja
     - require:
       - pkg: apache

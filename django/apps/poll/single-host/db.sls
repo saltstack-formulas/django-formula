@@ -8,7 +8,7 @@ mysql_remove_testdb:
     - absent
     - name: test
 
-{% for name, db in salt['pillar.get']('django_apps:poll:DATABASES', {}).iteritems() %}
+{% for name, db in salt['pillar.get']('django_apps:poll-single:DATABASES', {}).iteritems() %}
 polldb:
   mysql_database:
     - present

@@ -1,6 +1,6 @@
-{% set poll_venv = salt['pillar.get']('django_apps:poll:venv') %}
-{% set poll_proj = salt['pillar.get']('django_apps:poll:proj') %}
-{% set poll_settings = salt['pillar.get']('django_apps:poll:settings') %}
+{% set poll_venv = salt['pillar.get']('django_apps:poll-single:venv') %}
+{% set poll_proj = salt['pillar.get']('django_apps:poll-single:proj') %}
+{% set poll_settings = salt['pillar.get']('django_apps:poll-single:settings') %}
 
 poll_loaddata:
   module:

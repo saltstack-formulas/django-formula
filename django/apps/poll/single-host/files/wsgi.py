@@ -17,16 +17,16 @@ import os
 import site
 import sys
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "{{ salt['pillar.get']('django_apps:poll:settings') }}")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "{{ salt['pillar.get']('django_apps:poll-single:settings') }}")
 
 {% set poll_sitepackages = salt['cmd.exec_code'](
-    salt['pillar.get']('django_apps:poll:venv') ~ '/bin/python',
+    salt['pillar.get']('django_apps:poll-single:venv') ~ '/bin/python',
     'from distutils import sysconfig; print sysconfig.get_python_lib()'
 ) %}
 
 site.addsitedir('{{ poll_sitepackages }}')
 
-sys.path.append('{{ salt['pillar.get']('django_apps:poll:proj') }}')
+sys.path.append('{{ salt['pillar.get']('django_apps:poll-single:proj') }}')
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
