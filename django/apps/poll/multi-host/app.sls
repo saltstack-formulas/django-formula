@@ -43,7 +43,7 @@ poll_pkgs:
       - pkg: pip
       - virtualenv: poll_venv
 
-{% set db_server = salt['pillar.get']('django_apps:poll-multi:DATABASES', 'django-db') %}
+{% set db_server = salt['pillar.get']('django_apps:poll-multi:minion_roles:database', 'django-db') %}
 # Get salt['mine.get'](db_server, 'network.interfaces')[db_server]['eth0']['inet'][0]['address']
 {% set db_server_ip = salt['mine.get'](db_server, 'network.interfaces').get(db_server, {}).get('eth0', {}).get('inet', [{}])[0].get('address') %}
 {% if db_server_ip %}
