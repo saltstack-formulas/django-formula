@@ -59,7 +59,11 @@ Running ``syncdb`` or ``collectstatic`` automatically
 -----------------------------------------------------
 
 A wait state can be used to trigger ``django-admin.py syncdb`` or
-``django-admin.py collectstatic`` automatically::
+``django-admin.py collectstatic`` automatically. The following example runs
+both commands whenever the Git repository containing the example Django project
+is updated.
+
+::
 
     include:
       - django.pip
