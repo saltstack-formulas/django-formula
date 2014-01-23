@@ -30,7 +30,6 @@ poll:
     - force: True
     - require:
       - pkg: git
-      - ssh_known_hosts: github.com
       - virtualenv: poll_venv
 
 poll_pkgs:
