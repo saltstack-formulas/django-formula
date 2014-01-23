@@ -1,0 +1,4 @@
+django:
+  lookup:
+    pkg: python-django
+    pip: Django

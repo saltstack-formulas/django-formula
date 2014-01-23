@@ -1,0 +1,17 @@
+{% set lookup_table = {
+    'Debian': {
+        'pkg': 'python-django',
+    },
+    'RedHat': {
+        'pkg': 'python-django',
+    },
+    'CentOS-6': {
+        'pkg': 'Django14',
+    },
+} %}
+
+{# Use osfinger to do the lookup and fall back to os_family #}
+{% set django = salt['grains.filter_by'](lookup_table,
+    grain='osfinger',
+    default=lookup_table.get(grains.get('os_family'), {}),
+    merge=salt['pillar.get']('django:lookup')) %}
