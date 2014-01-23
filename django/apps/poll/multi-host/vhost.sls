@@ -20,6 +20,7 @@ poll-vhost:
       - service: apache
 
 
+{# Remove the default site (and enable the app's site if necesssary) #}
 {% if grains.os_family == 'Debian' %}
 a2ensite poll-vhost.conf:
   cmd:
@@ -27,23 +28,23 @@ a2ensite poll-vhost.conf:
     - require:
       - pkg: apache
       - file: poll-vhost
-{% endif %}
 
-
-{# Remove the default site #}
-
-{% if grains.os_family == 'RedHat' %}
-{{ apache.vhostdir }}/welcome.conf:
-  file:
-    - absent
-    - require:
-      - pkg: apache
-{% endif %}
-
-{% if grains.os_family == 'Debian' %}
 a2dissite default:
   cmd:
     - run
+    - require:
+      - pkg: apache
+
+service apache2 reload:
+  cmd:
+    - wait
+    - watch:
+      - cmd: a2ensite poll-vhost.conf
+      - cmd: a2dissite default
+{% elif grains.os_family == 'RedHat' %}
+{{ apache.vhostdir }}/welcome.conf:
+  file:
+    - absent
     - require:
       - pkg: apache
 {% endif %}
