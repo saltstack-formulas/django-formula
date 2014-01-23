@@ -1,12 +1,12 @@
-{% set foo_venv = salt['pillar.get']('django_apps:foo:venv') %}
-{% set foo_proj = salt['pillar.get']('django_apps:foo:proj') %}
-{% set foo_settings = salt['pillar.get']('django_apps:foo:settings') %}
+{% set poll_venv = salt['pillar.get']('django_apps:poll:venv') %}
+{% set poll_proj = salt['pillar.get']('django_apps:poll:proj') %}
+{% set poll_settings = salt['pillar.get']('django_apps:poll:settings') %}
 
-foo_loaddata:
+poll_loaddata:
   module:
     - run
     - name: django.loaddata
-    - fixtures: ' {{ foo_proj }}/foo/fixtures/foo.json'
-    - settings_module: {{ foo_settings }}
-    - bin_env: {{ foo_venv }}
-    - pythonpath: {{ foo_proj }}
+    - fixtures: ' {{ poll_proj }}/poll/fixtures/poll.json'
+    - settings_module: {{ poll_settings }}
+    - bin_env: {{ poll_venv }}
+    - pythonpath: {{ poll_proj }}

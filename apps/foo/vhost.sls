@@ -4,14 +4,14 @@ include:
   - apache
   - apache.mod_wsgi
 {% if grains['os'] == 'CentOS' %}
-  - foo.firewall
+  - poll.firewall
 {% endif %}
 
-foo-vhost:
+poll-vhost:
   file:
     - managed
-    - name: {{ apache.vhostdir }}/foo-vhost.conf
-    - source: salt://apps/foo/files/foo-vhost.conf
+    - name: {{ apache.vhostdir }}/poll-vhost.conf
+    - source: salt://apps/poll/files/poll-vhost.conf
     - template: jinja
     - require:
       - pkg: apache
@@ -21,12 +21,12 @@ foo-vhost:
 
 
 {% if grains.os_family == 'Debian' %}
-a2ensite foo-vhost.conf:
+a2ensite poll-vhost.conf:
   cmd:
     - run
     - require:
       - pkg: apache
-      - file: foo-vhost
+      - file: poll-vhost
 {% endif %}
 
 

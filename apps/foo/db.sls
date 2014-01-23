@@ -8,8 +8,8 @@ mysql_remove_testdb:
     - absent
     - name: test
 
-{% for name, db in salt['pillar.get']('django_apps:foo:DATABASES', {}).iteritems() %}
-foodb:
+{% for name, db in salt['pillar.get']('django_apps:poll:DATABASES', {}).iteritems() %}
+polldb:
   mysql_database:
     - present
     - name: {{ db.get('NAME') }}
@@ -17,16 +17,16 @@ foodb:
       - service: mysqld
       - pkg: mysql-python
 
-foodb_user:
+polldb_user:
   mysql_user:
     - present
     - name: {{ db.get('USER') }}
     - host: {{ db.get('HOST') }}
     - password: {{ db.get('PASSWORD') }}
     - require:
-      - mysql_database: foodb
+      - mysql_database: polldb
 
-foodb_grants:
+polldb_grants:
   mysql_grants:
     - present
     - grant: all privileges
@@ -34,5 +34,5 @@ foodb_grants:
     - user: {{ db.get('USER') }}
     - host: {{ db.get('HOST') }}
     - require:
-      - mysql_user: foodb_user
+      - mysql_user: polldb_user
 {% endfor %}

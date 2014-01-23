@@ -1,6 +1,6 @@
-{% set foo_venv = salt['pillar.get']('django_apps:foo:venv') %}
-{% set foo_proj = salt['pillar.get']('django_apps:foo:proj') %}
-{% set foo_settings = salt['pillar.get']('django_apps:foo:settings') %}
+{% set poll_venv = salt['pillar.get']('django_apps:poll:venv') %}
+{% set poll_proj = salt['pillar.get']('django_apps:poll:proj') %}
+{% set poll_settings = salt['pillar.get']('django_apps:poll:settings') %}
 
 include:
   - git
@@ -14,69 +14,69 @@ empty_venv:
     - require:
       - pkg: virtualenv
 
-foo_venv:
+poll_venv:
   virtualenv:
     - managed
-    - name: {{ foo_venv }}
+    - name: {{ poll_venv }}
     - system_site_packages: True
     - require:
       - pkg: virtualenv
 
-foo_gitsource:
+poll_gitsource:
   git.latest:
     - name: https://github.com/terminalmage/django-tutorial.git
-    - target: {{ foo_proj }}
+    - target: {{ poll_proj }}
     - force: True
     - require:
       - pkg: git
-      - virtualenv: foo_venv
+      - virtualenv: poll_venv
 
-foo_pkgs:
+poll_pkgs:
   pip:
     - installed
-    - bin_env: {{ foo_venv }}
-    - requirements: {{ foo_proj }}/requirements.txt
+    - bin_env: {{ poll_venv }}
+    - requirements: {{ poll_proj }}/requirements.txt
     - require:
-      - git: foo_gitsource
+      - git: poll_gitsource
       - pkg: pip
-      - virtualenv: foo_venv
+      - virtualenv: poll_venv
 
-foo_settings:
+poll_settings:
   file:
     - managed
-    - name: {{ foo_proj }}/foo/settings.py
-    - source: salt://apps/foo/files/settings.py
+    - name: {{ poll_proj }}/poll/settings.py
+    - source: salt://apps/poll/files/settings.py
     - template: jinja
     - require:
-      - git: foo_gitsource
+      - git: poll_gitsource
 
-foo_wsgi:
+poll_wsgi:
   file:
     - managed
-    - name: {{ foo_proj }}/foo/wsgi.py
-    - source: salt://apps/foo/files/wsgi.py
+    - name: {{ poll_proj }}/poll/wsgi.py
+    - source: salt://apps/poll/files/wsgi.py
     - template: jinja
     - require:
-      - git: foo_gitsource
+      - git: poll_gitsource
 
-foo_syncdb:
+poll_syncdb:
   module:
     - run
     - name: django.syncdb
-    - settings_module: {{ foo_settings }}
-    - bin_env: {{ foo_venv }}
-    - pythonpath: {{ foo_proj }}
+    - settings_module: {{ poll_settings }}
+    - bin_env: {{ poll_venv }}
+    - pythonpath: {{ poll_proj }}
     - require:
-      - file: foo_settings
-      - pip: foo_pkgs
+      - file: poll_settings
+      - pip: poll_pkgs
 
-foo_collectstatic:
+poll_collectstatic:
   module:
     - run
     - name: django.collectstatic
-    - settings_module: {{ foo_settings }}
-    - bin_env: {{ foo_venv }}
-    - pythonpath: {{ foo_proj }}
+    - settings_module: {{ poll_settings }}
+    - bin_env: {{ poll_venv }}
+    - pythonpath: {{ poll_proj }}
     - require:
-      - file: foo_settings
-      - pip: foo_pkgs
+      - file: poll_settings
+      - pip: poll_pkgs
