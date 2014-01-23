@@ -4,7 +4,7 @@ include:
   - apache
   - apache.mod_wsgi
 {% if grains['os'] == 'CentOS' %}
-  - poll.firewall
+  - django.apps.poll.multi-host.firewall
 {% endif %}
 
 poll-vhost:
