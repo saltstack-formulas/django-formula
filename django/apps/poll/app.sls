@@ -45,7 +45,7 @@ poll_settings:
   file:
     - managed
     - name: {{ poll_proj }}/poll/settings.py
-    - source: salt://apps/poll/files/settings.py
+    - source: salt://django/apps/poll/files/settings.py
     - template: jinja
     - require:
       - git: poll_gitsource
@@ -54,7 +54,7 @@ poll_wsgi:
   file:
     - managed
     - name: {{ poll_proj }}/poll/wsgi.py
-    - source: salt://apps/poll/files/wsgi.py
+    - source: salt://django/apps/poll/files/wsgi.py
     - template: jinja
     - require:
       - git: poll_gitsource

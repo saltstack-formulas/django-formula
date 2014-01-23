@@ -11,7 +11,7 @@ poll-vhost:
   file:
     - managed
     - name: {{ apache.vhostdir }}/poll-vhost.conf
-    - source: salt://apps/poll/files/poll-vhost.conf
+    - source: salt://django/apps/poll/files/poll-vhost.conf
     - template: jinja
     - require:
       - pkg: apache
