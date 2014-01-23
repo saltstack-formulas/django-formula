@@ -1,5 +1,5 @@
 """
-WSGI config for foo project.
+WSGI config for poll project.
 
 This module contains the WSGI application used by Django's development server
 and any production WSGI deployments. It should expose a module-level variable
@@ -19,12 +19,12 @@ import sys
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "{{ salt['pillar.get']('django_apps:poll-multi:settings') }}")
 
-{% set foo_sitepackages = salt['cmd.exec_code'](
+{% set poll_sitepackages = salt['cmd.exec_code'](
     salt['pillar.get']('django_apps:poll-multi:venv') ~ '/bin/python',
     'from distutils import sysconfig; print sysconfig.get_python_lib()'
 ) %}
 
-site.addsitedir('{{ foo_sitepackages }}')
+site.addsitedir('{{ poll_sitepackages }}')
 
 sys.path.append('{{ salt['pillar.get']('django_apps:poll-multi:proj') }}')
 
