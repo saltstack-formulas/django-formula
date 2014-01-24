@@ -3,6 +3,8 @@ django:
     pkg: python-django
     pip: Django
 
+
+# Django Application Deployment
 django_apps:
 
   poll-single:
