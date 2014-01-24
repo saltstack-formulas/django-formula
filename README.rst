@@ -150,13 +150,125 @@ following command:
 Other Tips
 ==========
 
-Running ``syncdb`` or ``collectstatic`` automatically
------------------------------------------------------
+Create ``settings.py`` using data from Pillar
+---------------------------------------------
+
+The easiest way to create Django's ``setttings.py`` file using data from Pillar
+is to simply transform a dictionary in YAML into a dictionary in Python.
+
+``/srv/salt/mysite.sls``::
+
+    include:
+      - django.pip
+
+    mysite:
+      git:
+        - latest
+        - name: git@git.example.com/mysite
+        - target: /var/www/mysite
+        - require:
+            - pip: django_pip
+
+    mysite_settings:
+      file:
+        - managed
+        - name: /var/www/mysite/settings.py
+        - contents: |
+            globals().update({{ salt['pillar.get']('mysite:settings') | python() | indent(8) }})
+        - require:
+          - git: mysite
+
+``/srv/pillar/mysite.sls``::
+
+    mysite:
+      settings:
+        ROOT_URLCONF: mysite.urls
+        SECRET_KEY: 'gith!)on!_dq0=2l(otd67%#0urmrk6_d0!zu)i9fn=!8_g5(c'
+        DATABASES:
+          default:
+            ENGINE: django.db.backends.mysql
+            NAME: mysitedb
+            USER: mysiteuser
+            PASSWORD: mysitepass
+            HOST: localhost
+            PORT: 3306
+        TEMPLATE_DIRS:
+          - /var/www/mysite/django-tutorial/templates
+        STATICFILES_DIRS:
+          - /var/www/mysite/django-tutorial/static
+        STATIC_ROOT: /var/www/mysite/django-tutorial/staticroot
+
+Create ``settings.py`` with a template file
+-------------------------------------------
+
+A more traditional (and flexible) method of creating the ``settings.py`` file
+is to actually create the file as a template.
+
+``/srv/salt/mysite/mysite.sls``::
+
+    include:
+      - django.pip
+
+    mysite:
+      git:
+        - latest
+        - name: git@git.example.com/mysite
+        - target: /var/www/mysite
+        - require:
+            - pip: django_pip
+
+    mysite_settings:
+      file:
+        - managed
+        - name: /var/www/mysite/settings.py
+        - source: salt://mysite/files/settings-tmpl.py
+        - template: jinja
+        - require:
+          - git: mysite
+
+``/srv/salt/mysite/files/settings-tmpl.py``::
+
+    {# Data can be defined inline, in Grains, in Pillar, etc #}
+
+    {% set db_settings = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': 'localhost',
+            'NAME': 'polldb',
+            'PASSWORD': 'pollpass',
+            'PORT': 3306,
+            'USER': 'polluser',
+        }
+    } %}
+
+    {% set staticfiles_dirs_settings = [
+        '/var/www/poll/django-tutorial/static',
+    ] %}
+
+    {% set template_dirs_settings = [
+        '/var/www/poll/django-tutorial/templates',
+    ] %}
+
+    ROOT_URLCONF = mysite.urls
+
+    {# Have Salt automatically generate the SECRET_KEY for this minion #}
+    SECRET_KEY = '{{ salt['grains.get_or_set_hash']('mysite:SECRET_KEY', 50) }}'
+
+    DATABASES = {{ db_settings | python() }}
+
+    TEMPLATE_DIRS = {{ template_dirs_settings | python() }}
+
+    STATICFILES_DIRS = {{ staticfiles_dirs_settings | python() }}
+
+    STATIC_ROOT = /var/www/mysite/django-tutorial/staticroot
+
+Run ``syncdb`` or ``collectstatic`` automatically
+-------------------------------------------------
 
 A wait state can be used to trigger ``django-admin.py syncdb`` or
 ``django-admin.py collectstatic`` automatically. The following example runs
-both commands whenever the Git repository containing the example Django project
-is updated.
+both commands whenever the Git repository containing the "mysite" Django
+project is updated.
 
 ::
 
