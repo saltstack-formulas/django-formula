@@ -90,32 +90,60 @@ Additionally, this example makes use of several other Salt formulae:
 .. _pip-formula: https://github.com/saltstack-formulas/pip-formula.git
 .. _virtualenv-formula: https://github.com/saltstack-formulas/virtualenv-formula.git
 
-An easy way to use these would be to add them as gitfs sources. For example:
+An easy way to use these would be to add them as gitfs sources. It is not
+recommended to add the master copy of the repo (the one within the
+`saltstack-formulas`_ account), as others may be pushing to this repository.
+Instead, it's safer to fork the repository on github, and use the fork as a
+gitfs remote. For example:
+
+.. _saltstack-formulas: https://github.com/saltstack-formulas
 
 .. code-block:: yaml
 
     gitfs_remotes:
-      - https://github.com/saltstack-formulas/django-formula.git
-      - https://github.com/saltstack-formulas/apache-formula.git
-      - https://github.com/saltstack-formulas/git-formula.git
-      - https://github.com/saltstack-formulas/mysql-formula.git
-      - https://github.com/saltstack-formulas/pip-formula.git
-      - https://github.com/saltstack-formulas/virtualenv-formula.git
+      - https://github.com/yourusername/django-formula.git
+      - https://github.com/yourusername/apache-formula.git
+      - https://github.com/yourusername/git-formula.git
+      - https://github.com/yourusername/mysql-formula.git
+      - https://github.com/yourusername/pip-formula.git
+      - https://github.com/yourusername/virtualenv-formula.git
 
+
+It is also a good idea, though not mandatory, to create a branch and use that
+to make any needed changes. This allows one to pull from the
+`saltstack-formulas`_ version of the repo into your local fork's ``master``
+branch, and evaluate the changes without causing conflicts with whatever
+changes you made.
+
+.. code-block:: bash
+
+    $ git branch
+    * master
+    $ git checkout -b deployment
+    Switched to a new branch 'deployment'
+    $ git push -u origin deployment 
+
+This would need to be repeated for each gitfs remote.
 
 To deploy the entire stack (Apache, MySQL, Django, application) to a single
 host, run the following command:
 
 .. code-block:: bash
 
-    salt-run state.over base /path/to/overstate.single
+    # salt-run state.over deployment /path/to/overstate.single
 
 To deploy using one database server (and one or more webservers), run the
 following command:
 
 .. code-block:: bash
 
-    salt-run state.over base /path/to/overstate.multi
+    # salt-run state.over deployment /path/to/overstate.multi
+
+.. note::
+
+   If you did not create a separate ``deployment`` branch as recommended above,
+   then replace ``deployment`` with ``base`` in the above ``salt-run``
+   commands.
 
 
 Other Tips
