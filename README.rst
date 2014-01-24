@@ -72,7 +72,8 @@ This example makes use of the following three files:
 .. _overstate.single: https://github.com/saltstack-formulas/django-formula/blob/master/overstate.single
 .. _overstate.multi: https://github.com/saltstack-formulas/django-formula/blob/master/overstate.multi
 
-Deploying this example will require that the relevant files are copied and
+Deploying this example will require that the relevant files from above (the
+Pillar data and appropriate OverState config file) are copied to the Master and
 edited as necessary. The Pillar data will need to be available to all involved
 minions.
 
@@ -93,7 +94,7 @@ Additionally, this example makes use of several other Salt formulae:
 An easy way to use these would be to add them as gitfs sources. It is not
 recommended to add the master copy of the repo (the one within the
 `saltstack-formulas`_ account), as others may be pushing to this repository.
-Instead, it's safer to fork the repository on github, and use the fork as a
+Instead, it's safer to fork the repository on GitHub, and use the fork as a
 gitfs remote. For example:
 
 .. _saltstack-formulas: https://github.com/saltstack-formulas
@@ -110,7 +111,7 @@ gitfs remote. For example:
 
 
 It is also a good idea, though not mandatory, to create a branch and use that
-to make any needed changes. This allows one to pull from the
+to make any needed changes. This allows you to pull from the
 `saltstack-formulas`_ version of the repo into your local fork's ``master``
 branch, and evaluate the changes without causing conflicts with whatever
 changes you made.
@@ -132,7 +133,7 @@ host, run the following command:
 
     # salt-run state.over deployment /path/to/overstate.single
 
-To deploy using one database server (and one or more webservers), run the
+To deploy using one database server (and one or more web servers), run the
 following command:
 
 .. code-block:: bash
