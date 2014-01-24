@@ -52,6 +52,72 @@ Example usage::
         - require:
             - pip: django_pip
 
+
+Full-stack App Deployment
+=========================
+
+This formula also provides an example of how Salt can be used to deploy a
+Django app in a single command, using the `OverState System`_. It installs
+Django into a virtualenv, using pip with a requirements.txt.
+
+.. _`OverState System`: http://docs.saltstack.com/ref/states/overstate.html
+
+This example makes use of the following three files:
+
+* `pillar.example`_ - Pillar data
+* `overstate.single`_ - Single-host OverState deployment stages 
+* `overstate.multi`_ - Multi-host OverState deployment stages
+
+.. _pillar.example: https://github.com/saltstack-formulas/django-formula/blob/master/pillar.example
+.. _overstate.single: https://github.com/saltstack-formulas/django-formula/blob/master/overstate.single
+.. _overstate.multi: https://github.com/saltstack-formulas/django-formula/blob/master/overstate.multi
+
+Deploying this example will require that the relevant files are copied and
+edited as necessary. The Pillar data will need to be available to all involved
+minions.
+
+Additionally, this example makes use of several other Salt formulae:
+
+* `apache-formula`_
+* `git-formula`_
+* `mysql-formula`_
+* `pip-formula`_
+* `virtualenv-formula`_
+
+.. _apache-formula: https://github.com/saltstack-formulas/apache-formula.git
+.. _git-formula: https://github.com/saltstack-formulas/git-formula.git
+.. _mysql-formula: https://github.com/saltstack-formulas/mysql-formula.git
+.. _pip-formula: https://github.com/saltstack-formulas/pip-formula.git
+.. _virtualenv-formula: https://github.com/saltstack-formulas/virtualenv-formula.git
+
+An easy way to use these would be to add them as gitfs sources. For example:
+
+.. code-block:: yaml
+
+    gitfs_remotes:
+      - https://github.com/saltstack-formulas/django-formula.git
+      - https://github.com/saltstack-formulas/apache-formula.git
+      - https://github.com/saltstack-formulas/git-formula.git
+      - https://github.com/saltstack-formulas/mysql-formula.git
+      - https://github.com/saltstack-formulas/pip-formula.git
+      - https://github.com/saltstack-formulas/virtualenv-formula.git
+
+
+To deploy the entire stack (Apache, MySQL, Django, application) to a single
+host, run the following command:
+
+.. code-block:: bash
+
+    salt-run state.over base /path/to/overstate.single
+
+To deploy using one database server (and one or more webservers), run the
+following command:
+
+.. code-block:: bash
+
+    salt-run state.over base /path/to/overstate.multi
+
+
 Other Tips
 ==========
 
