@@ -1,0 +1,27 @@
+mine_interfaces:
+  match: 'django-*'
+  function:
+    mine.send:
+      - network.interfaces
+
+mysql:
+  match: 'django-db'
+  require:
+    - mine_interfaces
+  sls:
+    - django.apps.poll.multi-host.db
+
+app:
+  match: 'django-web*'
+  require:
+    - mysql
+  sls:
+    - django.apps.poll.multi-host.app
+    - django.apps.poll.multi-host.vhost
+
+load_db:
+  match: 'django-web1'
+  require:
+    - app
+  sls:
+    - django.apps.poll.multi-host.loaddata

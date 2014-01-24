@@ -1,0 +1,19 @@
+mysql:
+  match: 'django-web1'
+  sls:
+    - django.apps.poll.single-host.db
+
+app:
+  match: 'django-web1'
+  require:
+    - mysql
+  sls:
+    - django.apps.poll.single-host.vhost
+    - django.apps.poll.single-host.app
+
+load_db:
+  match: 'django-web1'
+  require:
+    - app
+  sls:
+    - django.apps.poll.single-host.loaddata
