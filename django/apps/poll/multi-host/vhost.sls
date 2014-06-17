@@ -29,7 +29,15 @@ a2ensite poll-vhost.conf:
       - pkg: apache
       - file: poll-vhost
 
-a2dissite default:
+# TODO: Check other Debian/Ubuntu releases and make this more accurate
+{% set osrelease = grains['osrelease'] %}
+{% if grains['os'] == 'Ubuntu' and osrelease|float >= 14.04 %}
+    {% set default_site = '000-default' %}
+{% else %}
+    {% set default_site = 'default' %}
+{% endif %}
+
+a2dissite {{ default_site }}:
   cmd:
     - run
     - require:
@@ -40,7 +48,7 @@ service apache2 reload:
     - wait
     - watch:
       - cmd: a2ensite poll-vhost.conf
-      - cmd: a2dissite default
+      - cmd: a2dissite {{ default_site }}
 {% elif grains.os_family == 'RedHat' %}
 {{ apache.vhostdir }}/welcome.conf:
   file:
