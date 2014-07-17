@@ -60,7 +60,7 @@ This formula also provides an example of how Salt can be used to deploy a
 Django app in a single command, using the `OverState System`_. It installs
 Django into a virtualenv, using pip with a requirements.txt.
 
-.. _`OverState System`: http://docs.saltstack.com/ref/states/overstate.html
+.. _`OverState System`: http://docs.saltstack.com/en/latest/topics/tutorials/states_pt5.html#states-overstate
 
 This example makes use of the following three files:
 
