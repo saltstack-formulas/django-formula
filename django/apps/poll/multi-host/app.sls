@@ -9,15 +9,13 @@ include:
   - mysql.python
 
 empty_venv:
-  virtualenv:
-    - managed
+  virtualenv.managed:
     - name: /var/www/BASELINE
     - require:
       - pkg: virtualenv
 
 poll_venv:
-  virtualenv:
-    - managed
+  virtualenv.managed:
     - name: {{ poll_venv }}
     - system_site_packages: True
     - require:
@@ -33,8 +31,7 @@ poll:
       - virtualenv: poll_venv
 
 poll_pkgs:
-  pip:
-    - installed
+  pip.installed:
     - bin_env: {{ poll_venv }}
     - requirements: {{ poll_proj }}/requirements.txt
     - require:
@@ -47,8 +44,7 @@ poll_pkgs:
 {% set db_server_ip = salt['mine.get'](db_server, 'network.interfaces').get(db_server, {}).get('eth0', {}).get('inet', [{}])[0].get('address') %}
 {% if db_server_ip %}
 poll_settings:
-  file:
-    - managed
+  file.managed:
     - name: {{ poll_proj }}/poll/settings.py
     - source: salt://django/apps/poll/multi-host/files/settings.py
     - template: jinja
@@ -60,8 +56,7 @@ poll_settings:
 {% endif %}
 
 poll_wsgi:
-  file:
-    - managed
+  file.managed:
     - name: {{ poll_proj }}/poll/wsgi.py
     - source: salt://django/apps/poll/multi-host/files/wsgi.py
     - template: jinja
@@ -69,8 +64,7 @@ poll_wsgi:
       - git: poll
 
 poll_syncdb:
-  module:
-    - run
+  module.run:
     - name: django.syncdb
     - settings_module: {{ poll_settings }}
     - bin_env: {{ poll_venv }}
@@ -80,8 +74,7 @@ poll_syncdb:
       - pip: poll_pkgs
 
 poll_collectstatic:
-  module:
-    - run
+  module.run:
     - name: django.collectstatic
     - settings_module: {{ poll_settings }}
     - bin_env: {{ poll_venv }}

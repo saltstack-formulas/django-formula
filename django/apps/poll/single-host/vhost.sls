@@ -8,8 +8,7 @@ include:
 {% endif %}
 
 poll-vhost:
-  file:
-    - managed
+  file.managed:
     - name: {{ apache.vhostdir }}/poll-vhost.conf
     - source: salt://django/apps/poll/single-host/files/poll-vhost.conf
     - template: jinja
@@ -23,8 +22,7 @@ poll-vhost:
 {# Remove the default site (and enable the app's site if necesssary) #}
 {% if grains.os_family == 'Debian' %}
 a2ensite poll-vhost.conf:
-  cmd:
-    - run
+  cmd.run:
     - require:
       - pkg: apache
       - file: poll-vhost
@@ -38,21 +36,18 @@ a2ensite poll-vhost.conf:
 {% endif %}
 
 a2dissite {{ default_site }}:
-  cmd:
-    - run
+  cmd.run:
     - require:
       - pkg: apache
 
 service apache2 reload:
-  cmd:
-    - wait
+  cmd.wait:
     - watch:
       - cmd: a2ensite poll-vhost.conf
       - cmd: a2dissite {{ default_site }}
 {% elif grains.os_family == 'RedHat' %}
 {{ apache.vhostdir }}/welcome.conf:
-  file:
-    - absent
+  file.absent:
     - require:
       - pkg: apache
 {% endif %}
