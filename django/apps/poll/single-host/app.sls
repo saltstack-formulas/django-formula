@@ -8,15 +8,13 @@ include:
   - virtualenv
 
 empty_venv:
-  virtualenv:
-    - managed
+  virtualenv.managed:
     - name: /var/www/BASELINE
     - require:
       - pkg: virtualenv
 
 poll_venv:
-  virtualenv:
-    - managed
+  virtualenv.managed:
     - name: {{ poll_venv }}
     - system_site_packages: True
     - require:
@@ -32,8 +30,7 @@ poll_gitsource:
       - virtualenv: poll_venv
 
 poll_pkgs:
-  pip:
-    - installed
+  pip.installed:
     - bin_env: {{ poll_venv }}
     - requirements: {{ poll_proj }}/requirements.txt
     - require:
@@ -42,8 +39,7 @@ poll_pkgs:
       - virtualenv: poll_venv
 
 poll_settings:
-  file:
-    - managed
+  file.managed:
     - name: {{ poll_proj }}/poll/settings.py
     - source: salt://django/apps/poll/single-host/files/settings.py
     - template: jinja
@@ -51,8 +47,7 @@ poll_settings:
       - git: poll_gitsource
 
 poll_wsgi:
-  file:
-    - managed
+  file.managed:
     - name: {{ poll_proj }}/poll/wsgi.py
     - source: salt://django/apps/poll/single-host/files/wsgi.py
     - template: jinja
@@ -60,8 +55,7 @@ poll_wsgi:
       - git: poll_gitsource
 
 poll_syncdb:
-  module:
-    - run
+  module.run:
     - name: django.syncdb
     - settings_module: {{ poll_settings }}
     - bin_env: {{ poll_venv }}
@@ -71,8 +65,7 @@ poll_syncdb:
       - pip: poll_pkgs
 
 poll_collectstatic:
-  module:
-    - run
+  module.run:
     - name: django.collectstatic
     - settings_module: {{ poll_settings }}
     - bin_env: {{ poll_venv }}

@@ -3,8 +3,7 @@
 {% set poll_settings = salt['pillar.get']('django_apps:poll-single:settings') %}
 
 poll_loaddata:
-  module:
-    - run
+  module.run:
     - name: django.loaddata
     - fixtures: ' {{ poll_proj }}/poll/fixtures/poll.json'
     - settings_module: {{ poll_settings }}
