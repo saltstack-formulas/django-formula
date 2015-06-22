@@ -153,7 +153,7 @@ Other Tips
 Create ``settings.py`` using data from Pillar
 ---------------------------------------------
 
-The easiest way to create Django's ``setttings.py`` file using data from Pillar
+The easiest way to create Django's ``settings.py`` file using data from Pillar
 is to simply transform a dictionary in YAML into a dictionary in Python.
 
 ``/srv/salt/mysite.sls``::
