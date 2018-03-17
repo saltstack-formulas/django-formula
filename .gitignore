@@ -1,0 +1,10 @@
+*.egg
+*.egg-info/
+*.py[cod]
+.env
+.pytest_cache/
+__pycache__/
+Dockerfile.*_*
+ignore/
+.venv/
+tmp/
