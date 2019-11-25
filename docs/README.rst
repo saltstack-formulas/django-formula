@@ -1,22 +1,59 @@
-======
+.. _readme:
+
 django
 ======
 
+|img_travis| |img_sr|
+
+.. |img_travis| image:: https://travis-ci.com/saltstack-formulas/django-formula.svg?branch=master
+   :alt: Travis CI Build Status
+   :scale: 100%
+   :target: https://travis-ci.com/saltstack-formulas/django-formula
+.. |img_sr| image:: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
+   :alt: Semantic Release
+   :scale: 100%
+   :target: https://github.com/semantic-release/semantic-release
+
 Set up and configure the Django web application framework.
 
-.. note::
+.. contents:: **Table of Contents**
 
-    See the full `Salt Formulas installation and usage instructions
-    <http://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html>`_.
+General notes
+-------------
+
+See the full `SaltStack Formulas installation and usage instructions
+<https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html>`_.
+
+If you are interested in writing or contributing to formulas, please pay attention to the `Writing Formula Section
+<https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html#writing-formulas>`_.
+
+If you want to use this formula, please pay attention to the ``FORMULA`` file and/or ``git tag``,
+which contains the currently released version. This formula is versioned according to `Semantic Versioning <http://semver.org/>`_.
+
+See `Formula Versioning Section <https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html#versioning>`_ for more details.
+
+If you need (non-default) configuration, please pay attention to the ``pillar.example`` file and/or `Special notes`_ section.
+
+Contributing to this repo
+-------------------------
+
+**Commit message formatting is significant!!**
+
+Please see `How to contribute <https://github.com/saltstack-formulas/.github/blob/master/CONTRIBUTING.rst>`_ for more details.
+
+Special notes
+-------------
+
+None
 
 Available states
-================
+----------------
 
 .. contents::
-    :local:
+   :local:
 
 ``django``
-----------
+^^^^^^^^^^
 
 Install Django from the system package manager. Note, the Django version
 available varies by platform.
@@ -35,7 +72,7 @@ Example usage::
             - pkg: django
 
 ``django.pip``
---------------
+^^^^^^^^^^^^^^
 
 Install Django via pip.
 
@@ -54,7 +91,7 @@ Example usage::
 
 
 Full-stack App Deployment
-=========================
+-------------------------
 
 This formula also provides an example of how Salt can be used to deploy a
 Django app in a single command, using the `OverState System`_. It installs
@@ -148,10 +185,10 @@ following command:
 
 
 Other Tips
-==========
+----------
 
 Create ``settings.py`` using data from Pillar
----------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The easiest way to create Django's ``settings.py`` file using data from Pillar
 is to simply transform a dictionary in YAML into a dictionary in Python.
@@ -199,7 +236,7 @@ is to simply transform a dictionary in YAML into a dictionary in Python.
         STATIC_ROOT: /var/www/mysite/django-tutorial/staticroot
 
 Create ``settings.py`` with a template file
--------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A more traditional (and flexible) method of creating the ``settings.py`` file
 is to actually create the file as a template.
@@ -263,7 +300,7 @@ is to actually create the file as a template.
     STATIC_ROOT = /var/www/mysite/django-tutorial/staticroot
 
 Run ``syncdb`` or ``collectstatic`` automatically
--------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A wait state can be used to trigger ``django-admin.py syncdb`` or
 ``django-admin.py collectstatic`` automatically. The following example runs
@@ -302,3 +339,48 @@ project is updated.
         - pythonpath: /path/to/mysite_project   # optional
         - watch:
           - git: mysite
+
+Testing
+-------
+
+Linux testing is done with ``kitchen-salt``.
+
+Requirements
+^^^^^^^^^^^^
+
+* Ruby
+* Docker
+
+.. code-block:: bash
+
+   $ gem install bundler
+   $ bundle install
+   $ bin/kitchen test [platform]
+
+Where ``[platform]`` is the platform name defined in ``kitchen.yml``,
+e.g. ``debian-9-2019-2-py3``.
+
+``bin/kitchen converge``
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Creates the docker instance and runs the ``django.pip`` main state, ready for testing.
+
+``bin/kitchen verify``
+^^^^^^^^^^^^^^^^^^^^^^
+
+Runs the ``inspec`` tests on the actual instance.
+
+``bin/kitchen destroy``
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Removes the docker instance.
+
+``bin/kitchen test``
+^^^^^^^^^^^^^^^^^^^^
+
+Runs all of the stages above in one go: i.e. ``destroy`` + ``converge`` + ``verify`` + ``destroy``.
+
+``bin/kitchen login``
+^^^^^^^^^^^^^^^^^^^^^
+
+Gives you SSH access to the instance for manual testing.
