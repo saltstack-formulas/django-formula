@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
 django:
   lookup:
     pkg: python-django
@@ -31,8 +34,8 @@ django_apps:
     minion_roles:
       database: django-db
       webhosts:
-       - django-web1
-       - django-web2
+        - django-web1
+        - django-web2
     venv: /var/www/poll
     proj: /var/www/poll/django-tutorial
     settings: poll.settings

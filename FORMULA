@@ -1,0 +1,9 @@
+name: django
+os: Debian, Ubuntu, Raspbian, RedHat, Fedora, CentOS, Suse, openSUSE, Gentoo, Funtoo, Arch, Manjaro, Alpine, FreeBSD, OpenBSD, Solaris, SmartOS, Windows, MacOS
+os_family: Debian, RedHat, Suse, Gentoo, Arch, Alpine, FreeBSD, OpenBSD, Solaris, Windows, MacOS
+version: 0.4.0
+release: 1
+minimum_version: 2017.7
+summary: django formula
+description: Set up and configure the Django web application framework
+top_level_dir: django
