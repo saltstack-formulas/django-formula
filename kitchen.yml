@@ -312,6 +312,7 @@ suites:
       state_top:
         base:
           '*':
+            - django._mapdata
             - django.pip
       pillars:
         top.sls:
