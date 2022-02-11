@@ -41,8 +41,8 @@ a2dissite {{ default_site }}:
       - pkg: apache
 
 service apache2 reload:
-  cmd.wait:
-    - watch:
+  cmd.run:
+    - onchanges:
       - cmd: a2ensite poll-vhost.conf
       - cmd: a2dissite {{ default_site }}
 {% elif grains.os_family == 'RedHat' %}
